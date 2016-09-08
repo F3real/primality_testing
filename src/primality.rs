@@ -1,6 +1,8 @@
 #![crate_name = "primality"]
 #![crate_type = "lib"]
 
+#![cfg_attr(feature="clippy", feature(plugin))]
+#![cfg_attr(feature="clippy", plugin(clippy))]
 extern crate ramp;
 extern crate rand;
 
@@ -30,7 +32,7 @@ pub fn rabin_miller( potential_prime_str: &str, required_probability: u32) -> Re
    {
        if is_rabin_miller_prime( &rng.gen_int_range( &Int::from(2), potential_prime), potential_prime, s, &d)
        {
-           probability_is_composite = probability_is_composite + 1;
+           probability_is_composite += 1;
            continue;
        }
        return Ok(false);
@@ -110,9 +112,9 @@ pub fn rabin_miller_deterministic(potential_prime: &Int) -> bool
 #[inline]
 fn rabin_miller_witness(potential_prime: &Int, witnesses: Vec<i64>, s: u64, d: &Int) -> bool
 {
-    for witness in witnesses.iter()
+    for witness in &witnesses
     {
-        if is_rabin_miller_prime( &Int::from(*witness), potential_prime, s, &d)
+        if is_rabin_miller_prime( &Int::from(*witness), potential_prime, s, d)
         {
             continue;
         }
@@ -150,7 +152,7 @@ fn split_num(num: &Int) -> (u64, Int) {
  while &d & 1 == 0
  {
    d = &d >> 1;
-   s = s + 1;
+   s += 1;
  }
 
  (s, d)
@@ -237,8 +239,7 @@ pub fn jacobi_symbol( d: &Int, n: &Int) -> Result<Int, String>
            d = &d >> 1;
            match i32::from( & ( &n % 8) )
            {
-               3 => result = - result,
-               5 => result = - result,
+               3 | 5=> result = - result,
                _ => {}
            }
        }

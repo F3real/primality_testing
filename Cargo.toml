@@ -12,5 +12,6 @@ name = "example"
 path = "example.rs"
 
 [dependencies]
+clippy = {version = "*", optional = true}
 ramp = "0.3.3"
 rand = "0.3.14"
