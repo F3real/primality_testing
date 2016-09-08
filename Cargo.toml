@@ -1,0 +1,16 @@
+[package]
+name = "primality_testing"
+version = "0.1.0"
+authors = ["Stefan Ilic <stefan92f@yandex.com>"]
+
+[lib]
+name = "primality"
+path = "src/primality.rs"
+
+[[bin]]
+name = "example"
+path = "example.rs"
+
+[dependencies]
+ramp = "0.3.3"
+rand = "0.3.14"
