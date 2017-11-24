@@ -97,7 +97,7 @@ pub fn rabin_miller_deterministic(potential_prime: &Int) -> bool
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11], s, &d)
     }
-    else if potential_prime < &Int::from(341_550_071_728_321_i64)
+    else if potential_prime < &Int::from(3_474_749_660_383_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13], s, &d)
     }
