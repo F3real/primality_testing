@@ -8,6 +8,7 @@ use primality::{
     jacobi_symbol,
     number_of_bits,
     rabin_miller,
+    get_rabin_miller_probability,
 };
 
 
@@ -16,19 +17,14 @@ fn main(){
 
     println!("Number of digits: {}\n", target.len());
     println!("Number of bits(min): {}  Number of bits(max): {}\n", number_of_bits(target.len() as u32).0, number_of_bits(target.len() as u32).1);
-    match rabin_miller(target, 64)
+    println!("Probability:  {}", get_rabin_miller_probability(3312, 32).unwrap());
+    if rabin_miller(target, 32)
     {
-        Ok(is_prime)=>{
-                        if is_prime
-                        {
-                            println!("Number {} is prime",target);
-                        }
-                        else
-                        {
-                            println!("Number {} is not prime",target);
-                        }
-                    },
-        Err(str)=> println!("{}",str),
+        println!("Number {} is prime",target);
+    }
+    else
+    {
+        println!("Number {} is not prime",target);
     }
     println!("{}",jacobi_symbol(&Int::from(45455), &Int::from(54547)).unwrap() );
 }

@@ -11,18 +11,18 @@ use ramp::{RandomInt, Int};
 
 
 /*Returns True if probability that `n` is composite is less then 4**(`required_probability`)*/
-pub fn rabin_miller( potential_prime_str: &str, required_probability: u32) -> Result<bool, String>
+pub fn rabin_miller( potential_prime_str: &str, required_probability: u32) -> bool
 {
    let potential_prime = &Int::from_str(potential_prime_str).unwrap();
    /*Check if number is to small enough to do deterministic check.*/
    if potential_prime  < &Int::from_str("3317044064679887385961981").unwrap()
    {
-       return Ok(rabin_miller_deterministic(potential_prime));
+       return rabin_miller_deterministic(potential_prime);
    }
    /*check if number is even*/
    if potential_prime & 1 == 0
    {
-       return Ok(false);
+       return false;
    }
    let mut rng = rand::thread_rng();
    let mut probability_is_composite: u32 = 0;
@@ -35,12 +35,30 @@ pub fn rabin_miller( potential_prime_str: &str, required_probability: u32) -> Re
            probability_is_composite += 1;
            continue;
        }
-       return Ok(false);
+       return false;
    }
 
-   Ok(true)
+   true
 }
 
+/* Returns probability that number is composite given bit size of number and number of 
+rounds. Returns correct results in case:
+  bit size >=21
+  3 <= number_of_rounds <= bit_size / 9
+  From  Average case error estimates for the strong probable prime test by Damgard-Landrock-Pomerance*/
+pub fn get_rabin_miller_probability(bit_size: u32, number_of_rounds: u32) -> Result<f64, String>
+{
+   let k = f64::from(bit_size);
+   let t = f64::from(number_of_rounds);
+   if bit_size >= 21 && number_of_rounds >= 3 && number_of_rounds <= bit_size/9
+   {
+       Ok(k.powf(1.5) * 2f64.powf(t) * t.powf(-1.5) * 4f64.powf(2f64 - (k*t).sqrt()))
+   }
+   else
+   {
+       Err(String::from("Requirements are not met."))
+   }
+}
 
 /*Check if number is prime using precomputed witness values.
 Check is deterministic but can only be applied for values smaller then 3,317,044,064,679,887,385,961,981*/
