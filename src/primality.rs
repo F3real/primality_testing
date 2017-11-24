@@ -54,51 +54,51 @@ pub fn rabin_miller_deterministic(potential_prime: &Int) -> bool
     }
     else if potential_prime < &Int::from(1373653)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3], s, &d)
     }
     else if potential_prime < &Int::from(9080191)
     {
-        rabin_miller_witness(potential_prime, vec![31, 73], s, &d)
+        rabin_miller_witness(potential_prime, &[31, 73], s, &d)
     }
     else if potential_prime < &Int::from(25326001)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5], s, &d)
     }
     else if potential_prime < &Int::from(3215031751_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7], s, &d)
     }
     else if potential_prime < &Int::from(4759123141_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 7, 61], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 7, 61], s, &d)
     }
     else if potential_prime < &Int::from(1122004669633_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 13, 23, 1662803], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 13, 23, 1662803], s, &d)
     }
     else if potential_prime < &Int::from(2152302898747_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11], s, &d)
     }
     else if potential_prime < &Int::from(3474749660383_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11, 13], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13], s, &d)
     }
     else if potential_prime < &Int::from(341550071728321_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11, 13, 17], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17], s, &d)
     }
     else if potential_prime < &Int::from(3825123056546413051_i64)
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11, 13, 17, 19, 23], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17, 19, 23], s, &d)
     }
     else if potential_prime < &Int::from_str("318665857834031151167461").unwrap()
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37], s, &d)
     }
     else if potential_prime < &Int::from_str("3317044064679887385961981").unwrap()
     {
-        rabin_miller_witness(potential_prime, vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41], s, &d)
     }
     else
     {
@@ -110,9 +110,9 @@ pub fn rabin_miller_deterministic(potential_prime: &Int) -> bool
 
 
 #[inline]
-fn rabin_miller_witness(potential_prime: &Int, witnesses: Vec<i64>, s: u64, d: &Int) -> bool
+fn rabin_miller_witness(potential_prime: &Int, witnesses: &[i64], s: u64, d: &Int) -> bool
 {
-    for witness in &witnesses
+    for witness in witnesses.iter()
     {
         if is_rabin_miller_prime( &Int::from(*witness), potential_prime, s, d)
         {
@@ -185,9 +185,9 @@ pub fn number_of_bits(number_of_digits:u32) -> (u32, u32)
 {
    let log10_b2: f64 = 3.32192809489f64;
    (
-       ( log10_b2 * ( number_of_digits as f64 - 1f64)).ceil() as u32,
+       ( log10_b2 * ( f64::from(number_of_digits) - 1f64)).ceil() as u32,
 
-       (number_of_digits as f64 * log10_b2).ceil() as u32
+       ( f64::from(number_of_digits) * log10_b2).ceil() as u32
    )
 }
 
