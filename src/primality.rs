@@ -11,9 +11,8 @@ use ramp::{RandomInt, Int};
 
 
 /*Returns True if probability that `n` is composite is less then 4**(`required_probability`)*/
-pub fn rabin_miller( potential_prime_str: &str, required_probability: u32) -> bool
+pub fn rabin_miller(potential_prime: &Int, required_probability: u32) -> bool
 {
-   let potential_prime = &Int::from_str(potential_prime_str).unwrap();
    /*Check if number is to small enough to do deterministic check.*/
    if potential_prime  < &Int::from_str("3317044064679887385961981").unwrap()
    {
@@ -70,43 +69,43 @@ pub fn rabin_miller_deterministic(potential_prime: &Int) -> bool
     {
         is_rabin_miller_prime( &Int::from(2), potential_prime, s, &d)
     }
-    else if potential_prime < &Int::from(1373653)
+    else if potential_prime < &Int::from(1_373_653)
     {
         rabin_miller_witness(potential_prime, &[2, 3], s, &d)
     }
-    else if potential_prime < &Int::from(9080191)
+    else if potential_prime < &Int::from(9_080_191)
     {
         rabin_miller_witness(potential_prime, &[31, 73], s, &d)
     }
-    else if potential_prime < &Int::from(25326001)
+    else if potential_prime < &Int::from(25_326_001)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5], s, &d)
     }
-    else if potential_prime < &Int::from(3215031751_i64)
+    else if potential_prime < &Int::from(3_215_031_751_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7], s, &d)
     }
-    else if potential_prime < &Int::from(4759123141_i64)
+    else if potential_prime < &Int::from(4_759_123_141_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 7, 61], s, &d)
     }
-    else if potential_prime < &Int::from(1122004669633_i64)
+    else if potential_prime < &Int::from(1_122_004_669_633_i64)
     {
-        rabin_miller_witness(potential_prime, &[2, 13, 23, 1662803], s, &d)
+        rabin_miller_witness(potential_prime, &[2, 13, 23, 1_662_803], s, &d)
     }
-    else if potential_prime < &Int::from(2152302898747_i64)
+    else if potential_prime < &Int::from(2_152_302_898_747_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11], s, &d)
     }
-    else if potential_prime < &Int::from(3474749660383_i64)
+    else if potential_prime < &Int::from(341_550_071_728_321_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13], s, &d)
     }
-    else if potential_prime < &Int::from(341550071728321_i64)
+    else if potential_prime < &Int::from(341_550_071_728_321_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17], s, &d)
     }
-    else if potential_prime < &Int::from(3825123056546413051_i64)
+    else if potential_prime < &Int::from(3_825_123_056_546_413_051_i64)
     {
         rabin_miller_witness(potential_prime, &[2, 3, 5, 7, 11, 13, 17, 19, 23], s, &d)
     }
@@ -201,7 +200,7 @@ fn mod_exp(base: &Int, exponent: &Int, modulus: &Int) -> Int {
 /*Returns (min bits, max bits) touple for number with given number of digits*/
 pub fn number_of_bits(number_of_digits:u32) -> (u32, u32)
 {
-   let log10_b2: f64 = 3.32192809489f64;
+   let log10_b2: f64 = 3.321_928_094_89_f64;
    (
        ( log10_b2 * ( f64::from(number_of_digits) - 1f64)).ceil() as u32,
 
@@ -209,11 +208,22 @@ pub fn number_of_bits(number_of_digits:u32) -> (u32, u32)
    )
 }
 
+/*Returns number of digits in a number*/
+pub fn number_of_digits(test_number: &Int) -> u32
+{ 
+  let mut digit_number = 0;
+  let mut d = test_number.clone();
+  while d != 0
+  {
+      d = &d / 10;
+      digit_number += 1;
+  }
+  digit_number
+}
 
 /*Implementation of Baillie–PSW primality test.*/
-pub fn baillie_psw( potential_prime_str: &str) -> bool
+pub fn baillie_psw(potential_prime: &Int) -> bool
 {
-   let potential_prime = &Int::from_str(potential_prime_str).unwrap();
    //check if number is even
    if potential_prime & 1 == 0
    {
@@ -224,7 +234,6 @@ pub fn baillie_psw( potential_prime_str: &str) -> bool
    if !is_rabin_miller_prime( &Int::from(2), potential_prime, s, &d)
    {
        return false;
-
    }
    /*Find the first D in the sequence 5, -7, 9, -11, 13, -15, ... for which the Jacobi symbol (D/n) is −1..*/
    /*TODO*/
