@@ -10,7 +10,7 @@ use primality::{
     number_of_bits,
     number_of_digits,
     rabin_miller,
-    get_rabin_miller_probability,
+    solovay_strassen,
 };
 
 
@@ -20,14 +20,23 @@ fn main(){
     let number_of_rounds = 32;
     println!("Number of digits: {}\n", target_len);
     println!("Number of bits(min): {}  Number of bits(max): {}\n", number_of_bits(target_len).0, number_of_bits(target_len).1);
-    println!("Probability:  {}", get_rabin_miller_probability(3312, number_of_rounds).unwrap());
     if rabin_miller(target, number_of_rounds)
     {
-        println!("Number {} is prime",target);
+        println!("Rabin-Miller: Number {} is prime",target);
     }
     else
     {
-        println!("Number {} is not prime",target);
+        println!("Rabin-Miller: Number {} is not prime",target);
     }
+
+    if solovay_strassen(target, number_of_rounds)
+    {
+        println!("Solovay-Strassen: Number {} is prime",target);
+    }
+    else
+    {
+        println!("Solovay-Strassen: Number {} is not prime",target);
+    }
+
     println!("{}",jacobi_symbol(&Int::from(45455), &Int::from(54547)).unwrap() );
 }
